@@ -39,39 +39,38 @@ REST CRUD Example using EF Core
 4. Create Model Classes (will be used as our tables in migration)
 5. Create ApplicationDbContext class to be used for migration
 
-    public class InventoryContext : DbContext
-    {
-        public InventoryContext(DbContextOptions<InventoryContext> options)
-           : base(options)
-        {
+	    public class InventoryContext : DbContext
+	    {
+	      public InventoryContext(DbContextOptions<InventoryContext> options)
+	         : base(options)
+	      {
 
-        }
+	      }
 
-        public DbSet<Products> Products { get; set; }
+	      public DbSet<Products> Products { get; set; }
 
-        public DbSet<UserInfo> UserInfo { get; set; }
-    }
+	      public DbSet<UserInfo> UserInfo { get; set; }
+	    }
 6. create default connection string in appsettings.json
   
-	  "ConnectionStrings": {
-	    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=Inventory;Trusted_Connection=True;MultipleActiveResultSets=true"
-	  }
+		  "ConnectionStrings": {
+		    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=Inventory;Trusted_Connection=True;MultipleActiveResultSets=true"
+		  }
 7. bind ApplicationDbContext to Startup.cs
 	
-	// This method gets called by the runtime. Use this method to add services to the container.
-	
-	public void ConfigureServices(IServiceCollection services)
-	{
-			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-			services.AddControllers();
-	}
+		public void ConfigureServices(IServiceCollection services)
+		{
+				services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+				services.AddControllers();
+		}
 	
 7. run initial migration
-	Step 1: open package manager console
-	Step 2: run Add-Migration Initial
-	Step 3: run Update-Database
+		
+		Step 1: open package manager console
+		Step 2: run Add-Migration Initial
+		Step 3: run Update-Database
 	
-9. Build REST APIs
+9. Build REST APIs Controller
 	Step 1: Right–click the Controllers folder, choose Add, and then click Controller.
 
 	Step 2: Select API Controller with actions using the Entity Framework template.
@@ -79,19 +78,20 @@ REST CRUD Example using EF Core
 	Step 3: Choose the Products model class and InventoryContext context class, and then name the control ProductsController.
 	
 10. Change launch url in launchSettings.js under properties section
-	`"launchUrl": "api/products",`
+	
+		"launchUrl": "api/products",
 	
 11. Configure JWT
 	Step 1: Create an empty API controller called TokenController.
 
 	Step 2: Paste the below JWT configuration into the appsetting.json file.
 		
-	  "Jwt": {
-		"Key": "sdfsdgsfsdfdffg22323cvfgdfg",
-		"Issuer": "InventoryAuthenticationServer",
-		"Audience": "InventoryServicePostmantClient",
-		"Subject":  "InventoryServiceAccessToken"
-	  }
+		  "Jwt": {
+			"Key": "sdfsdgsfsdfdffg22323cvfgdfg",
+			"Issuer": "InventoryAuthenticationServer",
+			"Audience": "InventoryServicePostmantClient",
+			"Subject":  "InventoryServiceAccessToken"
+		  }
 	  
 	Step 3: Add the action method under TokenController to perform the following operations:
 
@@ -101,13 +101,15 @@ REST CRUD Example using EF Core
 		If invalid, bad request error will be returned.
 		@refer to TokenController@Post
 	
-	Step 4: generate access token by sending post request to https://localhost:44305/api/token.
+	Step 4: generate access token by sending post request to 
+
+		https://localhost:44305/api/token.
 	
 12. Secure API endpoint
 
 	Step 1: Configure authorization middleware in the startup configureService method.
 	
-	   services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+		 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 		{
 			options.RequireHttpsMetadata = false;
 			options.SaveToken = true;
@@ -122,10 +124,12 @@ REST CRUD Example using EF Core
 		});
 		
 	Step 2: Inject the authorization middleware into the Request pipeline @public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+	
 		// JWT
         app.UseAuthentication();
 		
 	Step 3: Add authorization attribute to the controller.
+	
 		[Authorize]
 
 ## Dependencies
