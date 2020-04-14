@@ -4,9 +4,6 @@
 
 REST CRUD Example using EF Core
 
-<img src="https://github.com/sgflores/BlazorCRUD/blob/master/Client/wwwroot/Capture.PNG" />
-
-
 ## Code Coverage
 1. Entity Framework with DB Migration and seeder
 2. API Controller
