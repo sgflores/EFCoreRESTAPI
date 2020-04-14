@@ -1,5 +1,6 @@
 
 
+
 # EFCoreRestAPI
 
 REST CRUD Example using EF Core
@@ -37,7 +38,7 @@ REST CRUD Example using EF Core
 3. Create new database
 4. Create Model Classes (will be used as our tables in migration)
 5. Create ApplicationDbContext class to be used for migration
-	EX:
+
     public class InventoryContext : DbContext
     {
         public InventoryContext(DbContextOptions<InventoryContext> options)
@@ -51,16 +52,20 @@ REST CRUD Example using EF Core
         public DbSet<UserInfo> UserInfo { get; set; }
     }
 6. create default connection string in appsettings.json
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=Inventory;Trusted_Connection=True;MultipleActiveResultSets=true"
-  }
+  
+	  "ConnectionStrings": {
+	    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=Inventory;Trusted_Connection=True;MultipleActiveResultSets=true"
+	  }
 7. bind ApplicationDbContext to Startup.cs
+	
 	// This method gets called by the runtime. Use this method to add services to the container.
+	
 	public void ConfigureServices(IServiceCollection services)
 	{
-		services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-		services.AddControllers();
+			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+			services.AddControllers();
 	}
+	
 7. run initial migration
 	Step 1: open package manager console
 	Step 2: run Add-Migration Initial
