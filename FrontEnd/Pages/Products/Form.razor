@@ -1,0 +1,49 @@
+﻿
+    <EditForm Model=@product OnValidSubmit=@ValidFormSubmitted OnInvalidSubmit=@InvalidFormSubmitted>
+        <DataAnnotationsValidator />
+
+
+        <div class="form-group">
+            <label for="Name">Product Name</label>
+            <input type="text" class="form-control" id="Name" placeholder="Product Name" @bind="product.Name">
+        </div>
+        <div class="form-group">
+            <label for="Color">Color</label>
+            <input type="text" class="form-control" id="Color" placeholder="Color" @bind="product.Color">
+        </div>
+        <div class="form-group">
+            <label for="Category">Category</label>
+            <input type="text" class="form-control" id="Category" placeholder="Category" @bind="product.Category">
+        </div>
+        <div class="form-group">
+            <label for="UnitPrice">Unit Price</label>
+            <input type="number" class="form-control" id="UnitPrice" placeholder="Unit Price" @bind="product.UnitPrice">
+        </div>
+        <div class="form-group">
+            <label for="AvailableQuantity">Quantity</label>
+            <input type="number" class="form-control" id="AvailableQuantity" placeholder="Stock On Hand" @bind="product.AvailableQuantity">
+        </div>
+
+
+        <input type="submit" class="btn btn-primary" value="Save" />
+    </EditForm>
+
+@code {
+
+    [Parameter]
+    public ProductsViewModel product { get; set; }
+
+    [Parameter]
+    public EventCallback<Products> OnSubmitHandler { get; set; }
+
+    private async Task ValidFormSubmitted()
+    {
+        await OnSubmitHandler.InvokeAsync(product);
+    }
+
+    private async Task InvalidFormSubmitted()
+    {
+        await OnSubmitHandler.InvokeAsync(product);
+    }
+
+}

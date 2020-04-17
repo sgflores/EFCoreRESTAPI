@@ -1,17 +1,16 @@
 
-
-
 # EFCoreRestAPI
 
-REST CRUD Example using EF Core
+REST CRUD Example using EF Core with Blazor integration
 
 ## Code Coverage
 1. Entity Framework with DB Migration and seeder
-2. API Controller
+2. BackEnd REST API with Controllers
 3. JWT
-4. REST API
+4. Blazor Frontend
+5. Run multiple project in one solution (FrontEnd Blazor / Backend REST API)
 
-## Project Setup
+## Project BackEnd API Setup
 1. Create an ASP.NET Core REST API application
 	Follow these steps to create an ASP.NET Core application in Visual Studio 2019:
 
@@ -35,8 +34,8 @@ REST CRUD Example using EF Core
 	Install-Package System.IdentityModel.Tokens.Jwt -Version 5.6.0
 	Install-Package Microsoft.AspNetCore.Authentication.JwtBearer -Version 3.1.0
 
-3. Create new database
-4. Create Model Classes (will be used as our tables in migration)
+3. Data Migrations
+4. Create Model Classes (Products, UserInfo) (will be used as our tables in migration)
 5. Create ApplicationDbContext class to be used for migration
 
 	    public class InventoryContext : DbContext
@@ -131,6 +130,52 @@ REST CRUD Example using EF Core
 	Step 3: Add authorization attribute to the controller.
 	
 		[Authorize]
+		
+	
+## Project FrontEnd Blazor Setup
+
+1. Add new project inside the same solution
+			
+	Step 1: Create Blazor app
+	Step 2: Reference APIService 
+			
+			Click Dependencies and add reference (InventoryService)
+					
+2. Create FrontEnd Services that would communicate to our backend API (InventoryService) controllers
+
+	Step 1: Create Services Folder
+	Step 2: Create Interfaces Folder and create new interfaces (common/specific,base service)
+	Step 3: Create Classes that will implement each corresponding interfaces
+	Step 4: Create a BaseService that will be used as parent class for all specific services
+	Step 5: Configure HttpClient inside BaseService class
+	Step 6: Register all our services in our startup.cs class under ConfigureServices method
+	
+		services.AddSingleton<IBaseService, BaseService>();
+		services.AddSingleton<IProductService, ProductService>();
+
+3. Create FrontEnd ViewModels. Will be used for mapping our backend API (InventoryService) models
+5. Create Razor Pages and call FrontEnd Services
+	
+		Refer to Pages/Products/Index.razor
+	
+## Deployment of multiple projects
+1. In Solution Explorer, select the solution (the top node).
+2. Choose the solution node's context (right-click) menu and then choose Properties. The Solution Property Pages dialog box appears.
+3. Expand the Common Properties node, and choose Startup Project.
+4. Choose the Multiple Startup Projects option and set the appropriate actions.
+6. Configure launchSettings for each project 
+	
+	Step 1: Under FrontEnd Solutions, open Properties/launchSettings.json
+and set the port number 
+			
+			"applicationUrl": "http://localhost:5000",
+	
+	Step 1: Under BackEnd (InventoryService) Solutions, open Properties/launchSettings.json and set the port number
+	
+			"applicationUrl": "http://localhost:5001"
+		
+	The BackEnd API will run on http://localhost:5001 and the FrontEnd webserver will run on another port(http://localhost:5000).
+
 
 ## Dependencies
 https://www.nuget.org/packages/Microsoft.EntityFrameworkCore/3.1.0?_src=template
@@ -140,3 +185,4 @@ https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools/3.1.0?_src=te
 
 ## References
 https://www.syncfusion.com/blogs/post/how-to-build-crud-rest-apis-with-asp-net-core-3-1-and-entity-framework-core-create-jwt-tokens-and-secure-apis.aspx
+https://wellsb.com/csharp/aspnet/blazor-httpclientfactory-and-web-api/

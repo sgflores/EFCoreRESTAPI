@@ -1,0 +1,21 @@
+﻿@if (isSubmitted && type == "success")
+{
+    <div class="alert alert-success">
+        Successfully Saved!
+    </div>
+}
+else if (isSubmitted && type == "error")
+{
+    <div class="alert alert-error">
+        Opps! Something went wrong!
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public bool isSubmitted { get; set; } = false;
+
+    [Parameter]
+    public string type { get; set; } = "success";
+}

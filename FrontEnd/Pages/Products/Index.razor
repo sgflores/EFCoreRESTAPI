@@ -1,0 +1,80 @@
+﻿@page "/products"
+@inject IJSRuntime js
+
+<h3>Products Master List</h3>
+
+@if (products != null)
+{
+    <table class="table table-bordered table-hover">
+
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Category</td>
+                <td>UnitPrice</td>
+                <td>Stock</td>
+                <td></td>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var product in products)
+            {
+
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Name</td>
+                    <td>@product.Category</td>
+                    <td>@product.UnitPrice</td>
+                    <td>@product.AvailableQuantity</td>
+
+                    <td>
+                        <a class="btn btn-success" href="/Products/edit/@product.Id">Edit</a>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteProduct(product))">Delete</button>
+                    </td>
+                </tr>
+
+
+            }
+        </tbody>
+
+    </table>
+
+}
+else if (products == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>No Record(s) Found!</p>
+
+}
+
+
+@code {
+
+    List<ProductsViewModel> products;
+    ProductService productService;
+
+    protected async override Task OnInitializedAsync()
+    {
+        productService = new ProductService();
+        await LoadProducts();
+    }
+
+
+    public async Task LoadProducts()
+    {
+        products = await productService.GetListAsync();
+    }
+
+    public async Task DeleteProduct(ProductsViewModel product)
+    {
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {product.Name}"))
+        {
+
+        }
+    }
+}

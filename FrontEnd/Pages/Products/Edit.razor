@@ -1,0 +1,68 @@
+﻿@page "/Products/edit/{Id:int}"
+
+<h3>Edit Product</h3>
+
+@if (product != null)
+{
+    <FrontEnd.Shared.Alert isSubmitted="@isSubmitted" type="@alertType"></FrontEnd.Shared.Alert>
+
+    <FrontEnd.Pages.Products.Form product="@product" OnSubmitHandler="@(async()=>await OnSubmit())"></FrontEnd.Pages.Products.Form>
+}
+else if (_loadFailed)
+{
+    <p>No Record Found!</p>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    ProductService productService;
+    ProductsViewModel product;
+
+    private bool _loadFailed = false;
+    private bool isSubmitted = false;
+    private string alertType = "success";
+
+    protected async override Task OnInitializedAsync()
+    {
+        productService = new ProductService();
+        await LoadProduct();
+    }
+
+
+    private async Task LoadProduct()
+    {
+        try
+        {
+            product = await productService.GetSingleAsync(Id);
+            _loadFailed = false;
+        }
+        catch (Exception ex)
+        {
+            _loadFailed = true;
+        }
+    }
+
+    private async Task OnSubmit()
+    {
+        isSubmitted = false;
+        try
+        {
+            await productService.Update(product.Id, product);
+            isSubmitted = true;
+            alertType = "success";
+        }
+        catch (Exception ex)
+        {
+            alertType = "error";
+        }
+    }
+
+
+}

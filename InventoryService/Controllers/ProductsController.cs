@@ -15,6 +15,7 @@ namespace InventoryService.Controllers
     // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class ProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
