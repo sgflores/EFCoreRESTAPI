@@ -54,6 +54,32 @@ namespace FrontEnd.Services
             return result;
         }
 
+        public async Task<string> PostDataAsync(string address, StringContent content)
+        {
+            ErrorMessage = string.Empty;
+            string result = null;
+
+            try
+            {
+                using HttpResponseMessage response = await ApiClient.PostAsync(address, content);
+
+                response.EnsureSuccessStatusCode();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsStringAsync();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
 
         public async Task<string> PutDataAsync(string address, StringContent content)
         {
@@ -63,6 +89,35 @@ namespace FrontEnd.Services
             try
             {
                 using HttpResponseMessage response = await ApiClient.PutAsync(address, content);
+
+                response.EnsureSuccessStatusCode();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsStringAsync();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
+
+        public async Task<string> DeleteDataAsync(string address, Dictionary<string, string> parameters)
+        {
+            ErrorMessage = string.Empty;
+            string result = null;
+
+            address = GeneratePathAndQueryString(address, parameters);
+
+            try
+            {
+                using HttpResponseMessage response = await ApiClient.DeleteAsync(address);
 
                 response.EnsureSuccessStatusCode();
 

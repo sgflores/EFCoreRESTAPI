@@ -10,7 +10,9 @@ namespace FrontEnd.Services.Interfaces
         public Task<List<T>> GetListAsync();
         public Task<List<T>> GetListAsync(Dictionary<string, string> parameters);
         public Task<T> GetSingleAsync(int Id);
+        public Task<bool> Add(T t);
         public Task<bool> Update(int Id, T t);
+        public Task<bool> Delete(int Id);
         public T SanitizeViewModel(T t);
 
     }

@@ -5,11 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InventoryService\InventoryService.csproj" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InventoryService\InventoryService.csproj" />
   </ItemGroup>
 
 </Project>

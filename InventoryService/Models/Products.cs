@@ -11,11 +11,15 @@ namespace InventoryService.Models
     {
         // By convention, a property named Id or <type name>Id will be configured as the primary key of an entity.
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Category { get; set; }
         public string Color { get; set; }
+        [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
+        [Required]
         public int AvailableQuantity { get; set; }
 
     }

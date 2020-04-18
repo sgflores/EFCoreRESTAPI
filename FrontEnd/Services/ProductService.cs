@@ -51,6 +51,17 @@ namespace FrontEnd.Services
             throw new NotImplementedException();
         }
 
+        public async Task<bool> Add(ProductsViewModel t)
+        {
+            var json = JsonConvert.SerializeObject(t);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await PostDataAsync($"Products", content)
+                .ConfigureAwait(false);
+
+            return true;
+        }
+
         public async Task<bool> Update(int Id, ProductsViewModel t)
         {
             var json = JsonConvert.SerializeObject(t);
@@ -61,6 +72,21 @@ namespace FrontEnd.Services
 
             return true;
 
+        }
+
+        public async Task<bool> Delete(int Id)
+        {
+            Dictionary<string, string> param = new Dictionary<string, string>();
+
+            var response = await DeleteDataAsync($"Products/{Id}", param)
+                .ConfigureAwait(false);
+
+            if (!string.IsNullOrEmpty(response))
+            {
+                return true;
+            }
+            // not found
+            throw new NotImplementedException();
         }
 
         // string empty null values

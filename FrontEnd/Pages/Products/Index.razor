@@ -5,6 +5,12 @@
 
 @if (products != null)
 {
+    <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
+
+    <a class="btn btn-primary" href="/Products/Create">Add New</a>
+
+    <br /><br />
+
     <table class="table table-bordered table-hover">
 
         <thead>
@@ -58,6 +64,10 @@ else
     List<ProductsViewModel> products;
     ProductService productService;
 
+    private bool _isSubmitted = false;
+    private string _message = "Successfully Saved!";
+    private string _alertType = "success";
+
     protected async override Task OnInitializedAsync()
     {
         productService = new ProductService();
@@ -72,9 +82,24 @@ else
 
     public async Task DeleteProduct(ProductsViewModel product)
     {
+        _isSubmitted = false;
+
         if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {product.Name}"))
         {
-
+            try
+            {
+                _isSubmitted = true;
+                _alertType = "success";
+                _message = "Successfully Deleted!";
+                await productService.Delete(product.Id);
+                await LoadProducts();
+            }
+            catch (Exception ex)
+            {
+                _isSubmitted = true;
+                _alertType = "error";
+                _message = "Unable to Delete!";
+            }
         }
     }
 }

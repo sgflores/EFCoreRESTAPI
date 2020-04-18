@@ -1,32 +1,36 @@
-﻿
-    <EditForm Model=@product OnValidSubmit=@ValidFormSubmitted OnInvalidSubmit=@InvalidFormSubmitted>
-        <DataAnnotationsValidator />
+﻿<EditForm Model=@product OnValidSubmit=@ValidFormSubmitted OnInvalidSubmit=@InvalidFormSubmitted>
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="Name">Product Name</label>
+        <InputText id="Name" class="form-control" @bind-Value="product.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Color">Color</label>
+        <InputText id="Color" class="form-control" @bind-Value="product.Color" />
+    </div>
+
+    <div class="form-group">
+        <label for="Category">Category</label>
+        <InputText id="Category" class="form-control" @bind-Value="product.Category" />
+    </div>
+
+    <div class="form-group">
+        <label for="UnitPrice">Unit Price</label>
+        <InputNumber id="UnitPrice" class="form-control" @bind-Value="product.UnitPrice" />
+    </div>
+
+    <div class="form-group">
+        <label for="AvailableQuantity">Quantity</label>
+        <InputNumber id="AvailableQuantity" class="form-control" @bind-Value="product.AvailableQuantity" />
+    </div>
 
 
-        <div class="form-group">
-            <label for="Name">Product Name</label>
-            <input type="text" class="form-control" id="Name" placeholder="Product Name" @bind="product.Name">
-        </div>
-        <div class="form-group">
-            <label for="Color">Color</label>
-            <input type="text" class="form-control" id="Color" placeholder="Color" @bind="product.Color">
-        </div>
-        <div class="form-group">
-            <label for="Category">Category</label>
-            <input type="text" class="form-control" id="Category" placeholder="Category" @bind="product.Category">
-        </div>
-        <div class="form-group">
-            <label for="UnitPrice">Unit Price</label>
-            <input type="number" class="form-control" id="UnitPrice" placeholder="Unit Price" @bind="product.UnitPrice">
-        </div>
-        <div class="form-group">
-            <label for="AvailableQuantity">Quantity</label>
-            <input type="number" class="form-control" id="AvailableQuantity" placeholder="Stock On Hand" @bind="product.AvailableQuantity">
-        </div>
-
-
-        <input type="submit" class="btn btn-primary" value="Save" />
-    </EditForm>
+    <input type="submit" class="btn btn-primary" value="Save" />
+</EditForm>
 
 @code {
 
@@ -36,6 +40,9 @@
     [Parameter]
     public EventCallback<Products> OnSubmitHandler { get; set; }
 
+    [Parameter]
+    public EventCallback<Products> OnValidSubmitHandler { get; set; }
+
     private async Task ValidFormSubmitted()
     {
         await OnSubmitHandler.InvokeAsync(product);
@@ -43,7 +50,7 @@
 
     private async Task InvalidFormSubmitted()
     {
-        await OnSubmitHandler.InvokeAsync(product);
+        await OnValidSubmitHandler.InvokeAsync(product);
     }
 
 }

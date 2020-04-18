@@ -19,7 +19,7 @@
     },
     "InventoryService": {
       "commandName": "Project",
-      "launchBrowser": true,
+      // "launchBrowser": true,
       // "launchUrl": "api/products",
       "applicationUrl": "http://localhost:5001;",
       "environmentVariables": {

@@ -1,28 +1,16 @@
-﻿@page "/Products/edit/{Id:int}"
+﻿@page "/Products/Create"
 
-<h3>Edit Product</h3>
+<h3>Create Product</h3>
 
-@if (product != null)
-{
-    <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
+<FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
 
-    <FrontEnd.Pages.Products.Form product="@product" 
-        OnSubmitHandler="@(async()=>await OnSubmit())" 
+<FrontEnd.Pages.Products.Form product="@product"
+        OnSubmitHandler="@(async()=>await OnSubmit())"
         OnValidSubmitHandler="@OnValidSubmit"></FrontEnd.Pages.Products.Form>
-}
-else if (_loadFailed)
-{
-    <p>No Record Found!</p>
-}
-else
-{
-    <p>Loading...</p>
-}
+
 
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
 
     ProductService productService;
     ProductsViewModel product;
@@ -35,21 +23,12 @@ else
     protected async override Task OnInitializedAsync()
     {
         productService = new ProductService();
-        await LoadProduct();
+        InitProduct();
     }
 
-
-    private async Task LoadProduct()
+    private void InitProduct()
     {
-        try
-        {
-            product = await productService.GetSingleAsync(Id);
-            _loadFailed = false;
-        }
-        catch (Exception ex)
-        {
-            _loadFailed = true;
-        }
+        product = new ProductsViewModel();
     }
 
     private async Task OnSubmit()
@@ -57,10 +36,11 @@ else
         _isSubmitted = false;
         try
         {
-            await productService.Update(product.Id, product);
+            await productService.Add(product);
             _isSubmitted = true;
             _alertType = "success";
             _message = "Successfully Saved!";
+            InitProduct();
         }
         catch (Exception ex)
         {
