@@ -95,7 +95,9 @@ namespace FrontEnd.Services
             ProductsViewModel model = new ProductsViewModel()
             {
                 Id = t.Id,
-                Category = t.Category ?? string.Empty,
+                CategoryId = t.CategoryId,
+                // StrCategoryId = t.CategoryId != null ? t.CategoryId.ToString() : string.Empty,
+                Category = t.Category,
                 Name = t.Name ?? string.Empty,
                 Color =  t.Color ?? string.Empty,
                 UnitPrice = t.UnitPrice,

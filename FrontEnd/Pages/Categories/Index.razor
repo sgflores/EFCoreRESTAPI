@@ -1,0 +1,104 @@
+﻿@page "/categories"
+@inject IJSRuntime js
+
+<h3>Categories Master List</h3>
+
+@if (categories != null)
+{
+    <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
+
+    <a class="btn btn-primary" href="/Categories/Create">Add New</a>
+
+    <br />
+    <br />
+
+    <table class="table table-bordered table-hover">
+
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Status</td>
+                <td></td>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var category in categories)
+            {
+
+                <tr>
+                    <td>@category.Id</td>
+                    <td>@category.Name</td>
+                    <td>
+                        <FrontEnd.Shared.RecordStatus Status="@category.Status"></FrontEnd.Shared.RecordStatus>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-success" href="/Categories/edit/@category.Id">Edit</a>
+                        <button class="btn btn-danger" @onclick="@(() => DeleteCategory(category))">Delete</button>
+                    </td>
+                </tr>
+
+
+            }
+        </tbody>
+
+    </table>
+
+}
+else if (categories == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>No Record(s) Found!</p>
+
+}
+
+
+@code {
+
+    List<CategoryViewModel> categories;
+    CategoryService categoryService;
+
+    private bool _isSubmitted = false;
+    private string _message = "Successfully Saved!";
+    private string _alertType = "success";
+
+    protected async override Task OnInitializedAsync()
+    {
+        categoryService = new CategoryService();
+        await LoadCategories();
+    }
+
+
+    public async Task LoadCategories()
+    {
+        categories = await categoryService.GetListAsync();
+    }
+
+    public async Task DeleteCategory(CategoryViewModel category)
+    {
+        _isSubmitted = false;
+
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {category.Name}"))
+        {
+            try
+            {
+                _isSubmitted = true;
+                _alertType = "success";
+                _message = "Successfully Deleted!";
+                await categoryService.Delete(category.Id);
+                await LoadCategories();
+            }
+            catch (Exception ex)
+            {
+                _isSubmitted = true;
+                _alertType = "error";
+                _message = "Unable to Delete!";
+            }
+        }
+    }
+}

@@ -31,7 +31,12 @@
                 <tr>
                     <td>@product.Id</td>
                     <td>@product.Name</td>
-                    <td>@product.Category</td>
+                    <td>
+                        @if (product.Category != null)
+                        {
+                            @product.Category.Name
+                        }
+                    </td>
                     <td>@product.UnitPrice</td>
                     <td>@product.AvailableQuantity</td>
 

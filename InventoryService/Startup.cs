@@ -33,6 +33,15 @@ namespace InventoryService
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
 
+            // Microsoft.AspNetCore.Mvc.NewtonsoftJson 
+            // fixed for System.Text.Json.JsonException: 
+            // A possible object cycle was detected which is not supported. 
+            // This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32. at
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
             /*services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;

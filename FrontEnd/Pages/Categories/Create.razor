@@ -1,0 +1,66 @@
+﻿@page "/Categories/Create"
+
+<h3>Create Category</h3>
+
+<FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" 
+                       Type="@_alertType" 
+                       Message="@_message">
+</FrontEnd.Shared.Alert>
+
+<FrontEnd.Pages.Categories.Form category="@category" 
+                       statuses="@_statuses" OnSubmitHandler="@(async() =>await OnSubmit())"
+                              OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Categories.Form>
+
+@code {
+
+    CategoryService categoryService;
+    CategoryViewModel category;
+    StaticService staticService;
+    List<Status> _statuses;
+
+    private bool _loadFailed = false;
+    private bool _isSubmitted = false;
+    private string _message = "Successfully Saved!";
+    private string _alertType = "success";
+
+    protected async override Task OnInitializedAsync()
+    {
+        categoryService = new CategoryService();
+        staticService = new StaticService();
+        _statuses = staticService.GetStatus();
+        InitCategory();
+    }
+
+    private void InitCategory()
+    {
+        category = new CategoryViewModel();
+    }
+
+    private async Task OnSubmit()
+    {
+        _isSubmitted = false;
+        try
+        {
+            await categoryService.Add(category);
+            _isSubmitted = true;
+            _alertType = "success";
+            _message = "Successfully Saved!";
+            InitCategory();
+        }
+        catch (Exception ex)
+        {
+            _isSubmitted = true;
+            _alertType = "error";
+            _message = "Error(s) Found!";
+        }
+    }
+
+    private void OnInvalidSubmit()
+    {
+        _isSubmitted = true;
+        _alertType = "error";
+        _message = "Error(s) Found!";
+    }
+
+
+}

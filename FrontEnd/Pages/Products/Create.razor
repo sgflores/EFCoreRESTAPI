@@ -6,7 +6,7 @@
 
 <FrontEnd.Pages.Products.Form product="@product"
         OnSubmitHandler="@(async()=>await OnSubmit())"
-        OnValidSubmitHandler="@OnValidSubmit"></FrontEnd.Pages.Products.Form>
+        OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Products.Form>
 
 
 
@@ -50,7 +50,7 @@
         }
     }
 
-    private void OnValidSubmit()
+    private void OnInvalidSubmit()
     {
         _isSubmitted = true;
         _alertType = "error";

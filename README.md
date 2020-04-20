@@ -1,4 +1,5 @@
 
+
 # EFCoreRestAPI
 
 REST CRUD Example using EF Core with Blazor integration
@@ -33,6 +34,7 @@ REST CRUD Example using EF Core with Blazor integration
 	Install-Package Microsoft.VisualStudio.Web.CodeGeneration.Design -Version 3.1.0
 	Install-Package System.IdentityModel.Tokens.Jwt -Version 5.6.0
 	Install-Package Microsoft.AspNetCore.Authentication.JwtBearer -Version 3.1.0
+    Microsoft.AspNetCore.Mvc.NewtonsoftJson
 
 3. Data Migrations
 4. Create Model Classes (Products, UserInfo) (will be used as our tables in migration)
@@ -76,6 +78,19 @@ REST CRUD Example using EF Core with Blazor integration
 
 	Step 3: Choose the Products model class and InventoryContext context class, and then name the control ProductsController.
 	
+	Step 4: Configure NewtonJson to fixed possible error for
+
+		System.Text.Json.JsonException: 
+		A possible object cycle was detected which is not supported. 
+		This can either be due to a cycle or if the object depth is larger 
+
+    This error occurs when eager loading model relationships. To fixed this we must install  `Microsoft.AspNetCore.Mvc.NewtonsoftJson` and add this package to our Startup.cs under ConfigureServices method
+		
+		services.AddControllersWithViews()
+		                .AddNewtonsoftJson(options =>
+		                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		            );
+
 10. Change launch url in launchSettings.js under properties section
 	
 		"launchUrl": "api/products",

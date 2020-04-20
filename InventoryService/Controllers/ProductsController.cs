@@ -15,7 +15,6 @@ namespace InventoryService.Controllers
     // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    [Produces("application/json")]
     public class ProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -55,8 +54,10 @@ namespace InventoryService.Controllers
             {
                 products = products.Take((int)take);
             }
-
-            return await products.ToListAsync();
+            // eager load relationship using Include
+            // NOTE: need to install newtonsoftjson to prevent json exception regarding maximum dept object
+            // refer to Startup.cs @ConfigureServices method
+            return await products.Include(product => product.Category).ToListAsync();
         }
 
         // GET: api/Products/5

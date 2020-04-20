@@ -13,14 +13,14 @@ namespace InventoryService.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
-        public string Category { get; set; }
         public string Color { get; set; }
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
         [Required]
         public int AvailableQuantity { get; set; }
+        public int? CategoryId { get; set; } // ? is nullable type
+        public Category Category { get; set; }
 
     }
 }

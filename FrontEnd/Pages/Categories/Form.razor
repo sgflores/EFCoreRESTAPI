@@ -1,0 +1,51 @@
+﻿<EditForm Model=@category OnValidSubmit=@ValidFormSubmitted OnInvalidSubmit=@InvalidFormSubmitted>
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="Name">Category Name</label>
+        <InputText id="Name" class="form-control" @bind-Value="category.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Status">Status</label>
+        <select id="Status" class="form-control" @bind="category.StrStatus">
+            @if (statuses != null)
+            {
+                @foreach (var stat in statuses)
+                {
+                    <option value="@stat.Value">@stat.Label</option>
+                }
+            }
+        </select>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Save" />
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public CategoryViewModel category { get; set; }
+
+    [Parameter]
+    public List<Status> statuses { get; set; }
+
+    [Parameter]
+    public EventCallback<CategoryViewModel> OnSubmitHandler { get; set; }
+
+    [Parameter]
+    public EventCallback<CategoryViewModel> OnInvalidSubmitHandler { get; set; }
+
+    private async Task ValidFormSubmitted()
+    {
+        await OnSubmitHandler.InvokeAsync(category);
+    }
+
+    private async Task InvalidFormSubmitted()
+    {
+        await OnInvalidSubmitHandler.InvokeAsync(category);
+    }
+
+}

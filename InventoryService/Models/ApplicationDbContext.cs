@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using InventoryService.Models;
 
 namespace InventoryService.Models
 {
@@ -20,12 +21,20 @@ namespace InventoryService.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Category>().HasData(
+             new Category
+             {
+                 Id = -1,
+                 Name = "Drinks",
+             }
+          );
+
             modelBuilder.Entity<Products>().HasData(
                new Products
                {
                    Id = -1,
                   Name = "Corned Beed",
-                  Category = "Can",
+                  // Category = "Can",
                   Color = "Yellow",
                   UnitPrice = 100,
                   AvailableQuantity = 1
@@ -45,5 +54,7 @@ namespace InventoryService.Models
             );
             #endregion
         }
+
+        public DbSet<InventoryService.Models.Category> Category { get; set; }
     }
 }

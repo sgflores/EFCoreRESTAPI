@@ -32,6 +32,8 @@ namespace FrontEnd
 
             services.AddSingleton<IBaseService, BaseService>();
             services.AddSingleton<IProductService, ProductService>();
+            services.AddSingleton<ICategoryService, CategoryService>();
+            services.AddSingleton<StaticService>();
 
 
         }

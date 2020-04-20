@@ -1,14 +1,14 @@
-﻿@page "/Products/edit/{Id:int}"
+﻿@page "/Categories/edit/{Id:int}"
 
-<h3>Edit Product</h3>
+<h3>Edit Category</h3>
 
-@if (product != null)
+@if (category != null)
 {
     <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
 
-    <FrontEnd.Pages.Products.Form product="@product" 
-        OnSubmitHandler="@(async()=>await OnSubmit())" 
-        OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Products.Form>
+    <FrontEnd.Pages.Categories.Form category="@category" statuses="@_statuses" 
+                                  OnSubmitHandler="@(async()=>await OnSubmit())"
+                                  OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Categories.Form>
 }
 else if (_loadFailed)
 {
@@ -24,8 +24,10 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    ProductService productService;
-    ProductsViewModel product;
+    CategoryService categoryService;
+    CategoryViewModel category;
+    StaticService staticService;
+    List<Status> _statuses;
 
     private bool _loadFailed = false;
     private bool _isSubmitted = false;
@@ -34,16 +36,18 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        productService = new ProductService();
-        await LoadProduct();
+        categoryService = new CategoryService();
+        staticService = new StaticService();
+        _statuses = staticService.GetStatus();
+        await LoadCategory();
     }
 
 
-    private async Task LoadProduct()
+    private async Task LoadCategory()
     {
         try
         {
-            product = await productService.GetSingleAsync(Id);
+            category = await categoryService.GetSingleAsync(Id);
             _loadFailed = false;
         }
         catch (Exception ex)
@@ -57,7 +61,7 @@ else
         _isSubmitted = false;
         try
         {
-            await productService.Update(product.Id, product);
+            await categoryService.Update(category.Id, category);
             _isSubmitted = true;
             _alertType = "success";
             _message = "Successfully Saved!";

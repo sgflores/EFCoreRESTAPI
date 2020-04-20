@@ -1,0 +1,13 @@
+﻿@if(Status)
+{
+    <span>Active</span>
+}
+else 
+{ 
+    <span>In-Active</span>
+}
+
+@code{ 
+    [Parameter]
+    public bool Status { get; set; }
+}

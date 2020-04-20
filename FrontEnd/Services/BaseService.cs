@@ -20,7 +20,6 @@ namespace FrontEnd.Services
         {
             ApiClient = new HttpClient();
             ApiClient.BaseAddress = new Uri("http://localhost:5001/api/");
-            // ApiClient.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
