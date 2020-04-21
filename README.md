@@ -193,11 +193,22 @@ and set the port number
 
 
 ## Dependencies
-https://www.nuget.org/packages/Microsoft.EntityFrameworkCore/3.1.0?_src=template
-https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Design/3.1.0?_src=template
-https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/3.1.0?_src=template
-https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools/3.1.0?_src=template
+Microsoft.EntityFrameworkCore
+Microsoft.EntityFrameworkCore.Design
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools
+Install-Package Microsoft.VisualStudio.Web.CodeGeneration.Design -Version 3.1.0
+Install-Package System.IdentityModel.Tokens.Jwt -Version 5.6.0
+Install-Package Microsoft.AspNetCore.Authentication.JwtBearer -Version 3.1.0
+Microsoft.AspNetCore.Mvc.NewtonsoftJson
 
 ## References
 https://www.syncfusion.com/blogs/post/how-to-build-crud-rest-apis-with-asp-net-core-3-1-and-entity-framework-core-create-jwt-tokens-and-secure-apis.aspx
+
 https://wellsb.com/csharp/aspnet/blazor-httpclientfactory-and-web-api/
+
+https://www.mikesdotnetting.com/article/342/managing-authentication-token-expiry-in-webassembly-based-blazor
+
+https://github.com/chrissainty/AuthenticationWithClientSideBlazor/tree/master/src/AuthenticationWithClientSideBlazor.Client/Services
+
+https://github.com/Blazored/LocalStorage

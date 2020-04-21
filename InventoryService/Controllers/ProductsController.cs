@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace InventoryService.Controllers
 { 
     // Startup.cs JWT Authorization
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase

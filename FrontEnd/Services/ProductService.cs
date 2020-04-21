@@ -13,6 +13,11 @@ namespace FrontEnd.Services
 {
     public class ProductService : BaseService, IProductService
     {
+        public ProductService(HttpClient httpClient) : base(httpClient)
+        {
+
+        }
+
         public async Task<List<ProductsViewModel>> GetListAsync()
         {
             Dictionary<string, string> param = new Dictionary<string, string>();

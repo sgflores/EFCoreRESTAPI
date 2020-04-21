@@ -53,9 +53,19 @@ namespace InventoryService.Controllers
 
                     var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                    var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: signIn);
+                    // var expiry = DateTime.UtcNow.AddDays(1);
 
-                    return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                    var expiry = DateTime.UtcNow.AddMinutes(2);
+
+                    var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: expiry, signingCredentials: signIn);
+                    
+                    LoginResult loginResult = new LoginResult()
+                    {
+                        Token = new JwtSecurityTokenHandler().WriteToken(token),
+                        Expiry = expiry
+                    };
+
+                    return Ok(loginResult);
                 }
                 else
                 {

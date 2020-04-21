@@ -1,4 +1,6 @@
-﻿<EditForm Model=@product OnValidSubmit=@ValidFormSubmitted OnInvalidSubmit=@InvalidFormSubmitted>
+﻿@inject ICategoryService categoryService
+
+<EditForm Model=@product OnValidSubmit=@ValidFormSubmitted OnInvalidSubmit=@InvalidFormSubmitted>
     <DataAnnotationsValidator />
 
     <ValidationSummary />
@@ -58,14 +60,12 @@
     [Parameter]
     public EventCallback<Products> OnInvalidSubmitHandler { get; set; }
 
-    CategoryService categoryService;
     List<CategoryViewModel> categories;
 
     protected override async Task OnParametersSetAsync()
     {
         Dictionary<string, string> param = new Dictionary<string, string>();
         param.Add("isActive", "1");
-        categoryService = new CategoryService();
         categories = await categoryService.GetListAsync(param);
     }
 

@@ -1,18 +1,19 @@
 ﻿@page "/Products/Create"
 
+@inject IProductService productService
+
 <h3>Create Product</h3>
 
 <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
 
 <FrontEnd.Pages.Products.Form product="@product"
-        OnSubmitHandler="@(async()=>await OnSubmit())"
-        OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Products.Form>
+                              OnSubmitHandler="@(async()=>await OnSubmit())"
+                              OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Products.Form>
 
 
 
 @code {
 
-    ProductService productService;
     ProductsViewModel product;
 
     private bool _loadFailed = false;
@@ -22,7 +23,6 @@
 
     protected async override Task OnInitializedAsync()
     {
-        productService = new ProductService();
         InitProduct();
     }
 

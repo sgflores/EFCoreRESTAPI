@@ -1,14 +1,16 @@
 ﻿@page "/Categories/edit/{Id:int}"
 
+@inject ICategoryService categoryService
+
 <h3>Edit Category</h3>
 
 @if (category != null)
 {
     <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
 
-    <FrontEnd.Pages.Categories.Form category="@category" statuses="@_statuses" 
-                                  OnSubmitHandler="@(async()=>await OnSubmit())"
-                                  OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Categories.Form>
+    <FrontEnd.Pages.Categories.Form category="@category" statuses="@_statuses"
+                                    OnSubmitHandler="@(async()=>await OnSubmit())"
+                                    OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Categories.Form>
 }
 else if (_loadFailed)
 {
@@ -24,7 +26,6 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    CategoryService categoryService;
     CategoryViewModel category;
     StaticService staticService;
     List<Status> _statuses;
@@ -36,7 +37,6 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        categoryService = new CategoryService();
         staticService = new StaticService();
         _statuses = staticService.GetStatus();
         await LoadCategory();

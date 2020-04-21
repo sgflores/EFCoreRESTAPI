@@ -1,14 +1,16 @@
 ﻿@page "/Products/edit/{Id:int}"
 
+@inject IProductService productService
+
 <h3>Edit Product</h3>
 
 @if (product != null)
 {
     <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
 
-    <FrontEnd.Pages.Products.Form product="@product" 
-        OnSubmitHandler="@(async()=>await OnSubmit())" 
-        OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Products.Form>
+    <FrontEnd.Pages.Products.Form product="@product"
+                                  OnSubmitHandler="@(async()=>await OnSubmit())"
+                                  OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Products.Form>
 }
 else if (_loadFailed)
 {
@@ -24,7 +26,6 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    ProductService productService;
     ProductsViewModel product;
 
     private bool _loadFailed = false;
@@ -34,7 +35,6 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        productService = new ProductService();
         await LoadProduct();
     }
 

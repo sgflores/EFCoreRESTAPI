@@ -1,4 +1,5 @@
-﻿using FrontEnd.Services.Interfaces;
+﻿using Blazored.LocalStorage;
+using FrontEnd.Services.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,24 @@ namespace FrontEnd.Services
 {
     public class BaseService : IBaseService
     {
-        public HttpClient ApiClient { get; set; }
+        public HttpClient ApiClient;
+        public TokenAuthenticationStateProvider _tokenAuthenticationStateProvider;
         public string ErrorMessage { get; set; }
 
         public BaseService()
         {
-            ApiClient = new HttpClient();
+
+        }
+
+        public BaseService(HttpClient httpClient)
+        {
+            ApiClient = httpClient;
+        }
+
+        public BaseService(HttpClient httpClient, TokenAuthenticationStateProvider tokenAuthenticationStateProvider)
+        {
+            ApiClient = httpClient;
+            _tokenAuthenticationStateProvider = tokenAuthenticationStateProvider;
             ApiClient.BaseAddress = new Uri("http://localhost:5001/api/");
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

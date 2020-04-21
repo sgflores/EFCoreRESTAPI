@@ -1,5 +1,7 @@
 ﻿@page "/products"
+
 @inject IJSRuntime js
+@inject IProductService productService
 
 <h3>Products Master List</h3>
 
@@ -9,7 +11,8 @@
 
     <a class="btn btn-primary" href="/Products/Create">Add New</a>
 
-    <br /><br />
+    <br />
+    <br />
 
     <table class="table table-bordered table-hover">
 
@@ -67,7 +70,6 @@ else
 @code {
 
     List<ProductsViewModel> products;
-    ProductService productService;
 
     private bool _isSubmitted = false;
     private string _message = "Successfully Saved!";
@@ -75,7 +77,6 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        productService = new ProductService();
         await LoadProducts();
     }
 

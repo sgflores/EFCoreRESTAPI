@@ -1,5 +1,7 @@
 ﻿@page "/Categories/Create"
 
+@inject ICategoryService categoryService
+
 <h3>Create Category</h3>
 
 <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" 
@@ -13,7 +15,6 @@
 
 @code {
 
-    CategoryService categoryService;
     CategoryViewModel category;
     StaticService staticService;
     List<Status> _statuses;
@@ -25,7 +26,6 @@
 
     protected async override Task OnInitializedAsync()
     {
-        categoryService = new CategoryService();
         staticService = new StaticService();
         _statuses = staticService.GetStatus();
         InitCategory();

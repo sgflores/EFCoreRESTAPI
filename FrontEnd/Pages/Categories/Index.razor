@@ -1,5 +1,7 @@
 ﻿@page "/categories"
+
 @inject IJSRuntime js
+@inject ICategoryService categoryService
 
 <h3>Categories Master List</h3>
 
@@ -61,15 +63,12 @@ else
 @code {
 
     List<CategoryViewModel> categories;
-    CategoryService categoryService;
-
     private bool _isSubmitted = false;
     private string _message = "Successfully Saved!";
     private string _alertType = "success";
 
     protected async override Task OnInitializedAsync()
     {
-        categoryService = new CategoryService();
         await LoadCategories();
     }
 
