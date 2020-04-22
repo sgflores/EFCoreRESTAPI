@@ -15,26 +15,25 @@ namespace FrontEnd.Services
     public class BaseService : IBaseService
     {
         public HttpClient ApiClient;
-        public TokenAuthenticationStateProvider _tokenAuthenticationStateProvider;
+
+        public readonly TokenAuthenticationStateProvider _tokenAuthenticationStateProvider;
         public string ErrorMessage { get; set; }
 
-        public BaseService()
+        public BaseService(TokenAuthenticationStateProvider tokenAuthenticationStateProvider)
         {
-
-        }
-
-        public BaseService(HttpClient httpClient)
-        {
-            ApiClient = httpClient;
-        }
-
-        public BaseService(HttpClient httpClient, TokenAuthenticationStateProvider tokenAuthenticationStateProvider)
-        {
-            ApiClient = httpClient;
             _tokenAuthenticationStateProvider = tokenAuthenticationStateProvider;
+
+            ApiClient = new HttpClient();
             ApiClient.BaseAddress = new Uri("http://localhost:5001/api/");
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+        }
+
+        public async Task SetAuthorization()
+        {
+            var token = await _tokenAuthenticationStateProvider.GetTokenAsync();
+            ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
         }
 
@@ -47,6 +46,7 @@ namespace FrontEnd.Services
 
             try
             {
+                await SetAuthorization();
                 using HttpResponseMessage response = await ApiClient.GetAsync(address);
 
                 response.EnsureSuccessStatusCode();
@@ -62,7 +62,7 @@ namespace FrontEnd.Services
             {
                 ErrorMessage = ex.Message;
             }
-
+             
             return result;
         }
 
@@ -73,6 +73,10 @@ namespace FrontEnd.Services
 
             try
             {
+                if (address.ToLower() != "token")
+                {
+                    await SetAuthorization();
+                }
                 using HttpResponseMessage response = await ApiClient.PostAsync(address, content);
 
                 response.EnsureSuccessStatusCode();
@@ -100,6 +104,7 @@ namespace FrontEnd.Services
 
             try
             {
+                await SetAuthorization();
                 using HttpResponseMessage response = await ApiClient.PutAsync(address, content);
 
                 response.EnsureSuccessStatusCode();
@@ -129,6 +134,7 @@ namespace FrontEnd.Services
 
             try
             {
+                await SetAuthorization();
                 using HttpResponseMessage response = await ApiClient.DeleteAsync(address);
 
                 response.EnsureSuccessStatusCode();

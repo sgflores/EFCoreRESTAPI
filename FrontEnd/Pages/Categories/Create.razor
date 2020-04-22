@@ -1,17 +1,18 @@
 ﻿@page "/Categories/Create"
+@attribute [Authorize]
 
 @inject ICategoryService categoryService
 
 <h3>Create Category</h3>
 
-<FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" 
-                       Type="@_alertType" 
+<FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted"
+                       Type="@_alertType"
                        Message="@_message">
 </FrontEnd.Shared.Alert>
 
-<FrontEnd.Pages.Categories.Form category="@category" 
-                       statuses="@_statuses" OnSubmitHandler="@(async() =>await OnSubmit())"
-                              OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Categories.Form>
+<FrontEnd.Pages.Categories.Form category="@category"
+                                statuses="@_statuses" OnSubmitHandler="@(async() =>await OnSubmit())"
+                                OnInvalidSubmitHandler="@OnInvalidSubmit"></FrontEnd.Pages.Categories.Form>
 
 @code {
 

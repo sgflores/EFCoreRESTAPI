@@ -15,11 +15,9 @@ namespace FrontEnd.Services
     public class TokenAuthenticationStateProvider : AuthenticationStateProvider
     {
         ILocalStorageService _localStorage;
-        HttpClient _httpClient;
-
-        public TokenAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorageService)
+        
+        public TokenAuthenticationStateProvider(ILocalStorageService localStorageService)
         {
-            _httpClient = httpClient;
             _localStorage = localStorageService;
         }
 
@@ -42,7 +40,8 @@ namespace FrontEnd.Services
 
             // raises the AuthenticationStateChanged event that the CascadingAuthenticationState component subscribes to, 
             // updating the CascadingAuthenticationState component about the current authentication status of the user.
-            
+            // directly links to App.razor
+
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
@@ -50,8 +49,7 @@ namespace FrontEnd.Services
         // Otherwise a valid token is returned, if one exists.
         public async Task<string> GetTokenAsync()
         {
-            // var expiry = await _jsRuntime.InvokeAsync<object>("localStorage.getItem", "authTokenExpiry");
-            var expiry = await _localStorage.GetItemAsync<string>("authExpiry");
+            var expiry = await _localStorage.GetItemAsync<string>("authTokenExpiry");
             if (expiry != null)
             {
                 if (DateTime.Parse(expiry.ToString()) > DateTime.Now)
@@ -74,7 +72,9 @@ namespace FrontEnd.Services
             var identity = string.IsNullOrEmpty(token)
                 ? new ClaimsIdentity()
                 : new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
-            return new AuthenticationState(new ClaimsPrincipal(identity));
+            var claims = new ClaimsPrincipal(identity);
+            return await Task.FromResult(new AuthenticationState(claims));
+            // return new AuthenticationState(claims);
         }
 
         /*

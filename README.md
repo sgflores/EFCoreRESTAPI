@@ -1,5 +1,6 @@
 
 
+
 # EFCoreRestAPI
 
 REST CRUD Example using EF Core with Blazor integration
@@ -172,7 +173,52 @@ REST CRUD Example using EF Core with Blazor integration
 5. Create Razor Pages and call FrontEnd Services
 	
 		Refer to Pages/Products/Index.razor
+		
+## Authorization
+1. Install Microsoft.AspNetCore.Components.Authorization 
+2. Use Authorization to the _Imports.razor file to bring the contents of the package into scope along with the ASP.NET Core authentication package:
+
+		@using Microsoft.AspNetCore.Authorization
+		@using Microsoft.AspNetCore.Components.Authorization
 	
+3. Create TokenAuthenticationStateProvider and extend it to AuthenticationStateProvider
+4.  Disable ServerPrerendered to make iLocalStorage work on initializeAsync methods.  Update 	_Host.cshtml and change component to	
+       
+        <component type="typeof(App)" render-mode="Server" />
+
+5. The AuthenticationStateProvider needs to be registered with the dependency injection system. This is done in the ConfigureServices method in Startup. Add authentication services to the application too:
+
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddAuthorizationCore();
+			services.AddScoped<TokenAuthenticationStateProvider>();
+			services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<TokenAuthenticationStateProvider>());
+		}
+		
+6. Now it's time to introduce the component that does subscribe to the NotifyAuthenticationStateChanged event, the CascadingAuthenticationState component. Open the App.razor file and replace the existing content with the following:
+
+		<CascadingAuthenticationState>
+			<Router AppAssembly="@typeof(Program).Assembly">
+				<Found Context="routeData">
+					<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+						<NotAuthorized>
+							<Login/>
+						</NotAuthorized>
+					</AuthorizeRouteView>
+				</Found>
+				<NotFound>
+					<LayoutView Layout="@typeof(MainLayout)">
+						<p>Sorry, there's nothing at this address.</p>
+					</LayoutView>
+				</NotFound>
+			</Router>
+		</CascadingAuthenticationState>
+	
+7. add authorization attribute to razor page
+	
+		@page "/products"
+		@attribute [Authorize]
+		
 ## Deployment of multiple projects
 1. In Solution Explorer, select the solution (the top node).
 2. Choose the solution node's context (right-click) menu and then choose Properties. The Solution Property Pages dialog box appears.

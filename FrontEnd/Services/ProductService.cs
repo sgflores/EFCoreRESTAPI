@@ -13,7 +13,10 @@ namespace FrontEnd.Services
 {
     public class ProductService : BaseService, IProductService
     {
-        public ProductService(HttpClient httpClient) : base(httpClient)
+        // register service as addScoped @Startup.cs
+        // scoped means
+        public ProductService(TokenAuthenticationStateProvider tokenAuthenticationStateProvider)
+         : base(tokenAuthenticationStateProvider)
         {
 
         }
@@ -27,6 +30,7 @@ namespace FrontEnd.Services
 
             List<ProductsViewModel> products = new List<ProductsViewModel>();
 
+            
             if (!string.IsNullOrEmpty(response))
             {
                 products = JsonConvert.DeserializeObject<List<ProductsViewModel>>(response);

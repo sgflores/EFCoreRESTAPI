@@ -1,4 +1,5 @@
 ﻿@page "/products"
+@attribute [Authorize]
 
 @inject IJSRuntime js
 @inject IProductService productService
@@ -79,7 +80,6 @@ else
     {
         await LoadProducts();
     }
-
 
     public async Task LoadProducts()
     {

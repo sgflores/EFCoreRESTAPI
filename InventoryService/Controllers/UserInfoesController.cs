@@ -14,55 +14,48 @@ namespace InventoryService.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class UserInfoesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public UserInfoesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Categories
+        // GET: api/UserInfoes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategory(string? isActive)
+        public async Task<ActionResult<IEnumerable<UserInfo>>> GetUserInfo()
         {
-            var categories = _context.Category.AsQueryable();
-
-            if (isActive != null) // Adds the condition to check availability 
-            {
-                categories = categories.Where(i => i.Status == (isActive == "1" ? true : false));
-            }
-
-            return await categories.ToListAsync();
+            return await _context.UserInfo.ToListAsync();
         }
 
-        // GET: api/Categories/5
+        // GET: api/UserInfoes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<UserInfo>> GetUserInfo(int id)
         {
-            var category = await _context.Category.FindAsync(id);
+            var userInfo = await _context.UserInfo.FindAsync(id);
 
-            if (category == null)
+            if (userInfo == null)
             {
                 return NotFound();
             }
 
-            return category;
+            return userInfo;
         }
 
-        // PUT: api/Categories/5
+        // PUT: api/UserInfoes/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public async Task<IActionResult> PutUserInfo(int id, UserInfo userInfo)
         {
-            if (id != category.Id)
+            if (id != userInfo.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(category).State = EntityState.Modified;
+            _context.Entry(userInfo).State = EntityState.Modified;
 
             try
             {
@@ -70,7 +63,7 @@ namespace InventoryService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoryExists(id))
+                if (!UserInfoExists(id))
                 {
                     return NotFound();
                 }
@@ -83,37 +76,37 @@ namespace InventoryService.Controllers
             return NoContent();
         }
 
-        // POST: api/Categories
+        // POST: api/UserInfoes
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<ActionResult<UserInfo>> PostUserInfo(UserInfo userInfo)
         {
-            _context.Category.Add(category);
+            _context.UserInfo.Add(userInfo);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+            return CreatedAtAction("GetUserInfo", new { id = userInfo.Id }, userInfo);
         }
 
-        // DELETE: api/Categories/5
+        // DELETE: api/UserInfoes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Category>> DeleteCategory(int id)
+        public async Task<ActionResult<UserInfo>> DeleteUserInfo(int id)
         {
-            var category = await _context.Category.FindAsync(id);
-            if (category == null)
+            var userInfo = await _context.UserInfo.FindAsync(id);
+            if (userInfo == null)
             {
                 return NotFound();
             }
 
-            _context.Category.Remove(category);
+            _context.UserInfo.Remove(userInfo);
             await _context.SaveChangesAsync();
 
-            return category;
+            return userInfo;
         }
 
-        private bool CategoryExists(int id)
+        private bool UserInfoExists(int id)
         {
-            return _context.Category.Any(e => e.Id == id);
+            return _context.UserInfo.Any(e => e.Id == id);
         }
     }
 }

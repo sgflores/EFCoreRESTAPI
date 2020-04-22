@@ -1,0 +1,105 @@
+﻿@page "/users"
+@attribute [Authorize]
+
+@inject IJSRuntime js
+@inject IUserInfoService userInfoService
+
+<h3>Users Master List</h3>
+
+@if (users != null)
+{
+    <FrontEnd.Shared.Alert IsSubmitted="@_isSubmitted" Type="@_alertType" Message="@_message"></FrontEnd.Shared.Alert>
+
+    <a class="btn btn-primary" href="/Users/Create">Add New</a>
+
+    <br />
+    <br />
+
+    <table class="table table-bordered table-hover">
+
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>FirstName</td>
+                <td>LastName</td>
+                <td>UserName</td>
+                <td>Email</td>
+                <td></td>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var user in users)
+            {
+
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    <a class="btn btn-success" href="/Users/Edit/@user.Id">Edit</a>
+                    <button class="btn btn-danger" @onclick="@(() => DeleteUser(user))">Delete</button>
+                </td>
+            </tr>
+
+
+            }
+        </tbody>
+
+    </table>
+
+}
+else if (users == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>No Record(s) Found!</p>
+
+}
+
+
+@code {
+
+    List<UserInfoViewModel> users;
+
+    private bool _isSubmitted = false;
+    private string _message = "Successfully Saved!";
+    private string _alertType = "success";
+
+    protected async override Task OnInitializedAsync()
+    {
+          await LoadUsers();
+    }
+
+    public async Task LoadUsers()
+    {
+        users = await userInfoService.GetListAsync();
+    }
+
+    public async Task DeleteUser(UserInfoViewModel user)
+    {
+        _isSubmitted = false;
+
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete {user.FirstName}"))
+        {
+            try
+            {
+                _isSubmitted = true;
+                _alertType = "success";
+                _message = "Successfully Deleted!";
+                await userInfoService.Delete(user.Id);
+                await LoadUsers();
+            }
+            catch (Exception ex)
+            {
+                _isSubmitted = true;
+                _alertType = "error";
+                _message = "Unable to Delete!";
+            }
+        }
+    }
+}

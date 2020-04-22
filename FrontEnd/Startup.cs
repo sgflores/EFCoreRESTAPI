@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using FrontEnd.Services;
@@ -33,20 +35,26 @@ namespace FrontEnd
             services.AddServerSideBlazor();
 
             services.AddBlazoredLocalStorage();
+            services.AddOptions();
 
             // The TokenAuthenticationStateProvider is registered so that it can be injected directly 
             // into components etc, and then the injected service is registered 
             // as the implementation of AuthenticationStateProvider. 
             services.AddAuthorizationCore();
 
-            // Scoped objects are the same within a request, but different across different requests.
-            services.AddHttpClient<TokenAuthenticationStateProvider>();
-            services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<TokenAuthenticationStateProvider>());
 
-            services.AddHttpClient<IBaseService, BaseService>();
-            services.AddHttpClient<IAuthService, AuthService>();
-            services.AddHttpClient<IProductService, ProductService>();
-            services.AddHttpClient<ICategoryService, CategoryService>();
+            // Scoped objects are the same within a request, but different across different requests.
+            // should be scoped because of ILocalStorageService
+            services.AddScoped<TokenAuthenticationStateProvider>();
+            services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<TokenAuthenticationStateProvider>());
+            
+            services.AddScoped<IBaseService, BaseService>();
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUserInfoService, UserInfoService>();
+
             services.AddSingleton<StaticService>();
 
         }

@@ -14,8 +14,8 @@ namespace FrontEnd.Services
 {
     public class AuthService : BaseService, IAuthService
     {
-        public AuthService(HttpClient httpClient, TokenAuthenticationStateProvider tokenAuthenticationStateProvider)
-            : base(httpClient, tokenAuthenticationStateProvider)
+        public AuthService(TokenAuthenticationStateProvider tokenAuthenticationStateProvider)
+            : base(tokenAuthenticationStateProvider)
         {
            
         }
@@ -33,7 +33,7 @@ namespace FrontEnd.Services
                 LoginResult loginResult = JsonConvert.DeserializeObject<LoginResult>(response);
                 // call class without initialization
                 await ((TokenAuthenticationStateProvider)_tokenAuthenticationStateProvider).SetTokenAsync(loginResult.Token, loginResult.Expiry);
-                ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
+                // ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
                 return loginResult;
             }
             // not found
@@ -43,7 +43,7 @@ namespace FrontEnd.Services
         public async Task Logout()
         {
             await((TokenAuthenticationStateProvider)_tokenAuthenticationStateProvider).SetTokenAsync(null);
-            ApiClient.DefaultRequestHeaders.Authorization = null;
+            // ApiClient.DefaultRequestHeaders.Authorization = null;
         }
     }
 }

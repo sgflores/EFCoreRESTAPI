@@ -12,7 +12,8 @@ namespace FrontEnd.Services
 {
     public class CategoryService : BaseService, ICategoryService
     {
-        public CategoryService(HttpClient httpClient) : base(httpClient)
+        public CategoryService(TokenAuthenticationStateProvider tokenAuthenticationStateProvider)
+         : base(tokenAuthenticationStateProvider)
         {
 
         }

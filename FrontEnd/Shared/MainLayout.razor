@@ -1,4 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@inject IAuthService authService
+@inject TokenAuthenticationStateProvider tokenAuthService
+@inject NavigationManager navigationManager
+@using System.Security.Claims
 
 <div class="sidebar">
     <NavMenu />
@@ -6,10 +10,46 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        <AuthorizeView>
+            Logged in as @context.User.FindFirst("FirstName").Value
+            &nbsp;&nbsp;
+            <button class="btn btn-sm btn-outline-dark" @onclick="@(async () => await Logout())">Logout</button>
+        </AuthorizeView>
     </div>
 
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+
+@code{
+
+    private string _authMessage;
+    private string _authFirstName;
+    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await tokenAuthService.GetAuthenticationStateAsync();
+
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            _authMessage = $"{user.Identity.Name} is authenticated.";
+            _claims = user.Claims;
+            _authFirstName = user.FindFirst(c => c.Type == "FirstName")?.Value;
+        }
+        else
+        {
+            _authMessage = "The user is NOT authenticated.";
+        }
+    }
+
+    public async Task Logout()
+    {
+        await authService.Logout();
+        navigationManager.NavigateTo("/login");
+    }
+}

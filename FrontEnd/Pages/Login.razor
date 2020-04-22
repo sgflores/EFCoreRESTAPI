@@ -1,7 +1,8 @@
-﻿@page "/"
-@layout EmptyLayout
+﻿@page "/Login"
+@*layout EmptyLayout*@
 
 @inject IAuthService authService 
+@inject NavigationManager navigationManager
 
 <section id="cover" class="min-vh-100">
     <div id="cover-caption">
@@ -11,6 +12,10 @@
                     @if (loginFailed)
                     {
                         <div class="alert alert-danger">Your credentials did not work. Please try again.</div>
+                    }
+                    @if (isLoading)
+                    {
+                        <div class="alert alert-info">Please wait...</div>
                     }
 
                     <div class="card">
@@ -52,13 +57,18 @@
     LoginResult result = new LoginResult();
     EditForm loginForm = new EditForm();
     private bool loginFailed { get; set; } = false;
+    private bool isLoading { get; set; } = false;
 
     private async Task ValidFormSubmitted()
     {
         try
         {
+            isLoading = true;
             await authService.Login(userInfo);
             loginFailed = false;
+            this.StateHasChanged();
+            navigationManager.NavigateTo("/");
+
         }
         catch (Exception ex)
         {
